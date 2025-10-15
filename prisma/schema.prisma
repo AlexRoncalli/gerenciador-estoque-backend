@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Enum para as funções de usuário
+enum Role {
+  ADMIN
+  USUARIO
+}
+
+// Modelo para requisições de exclusão
+model DeletionRequest {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  productSku       String
+  status           String   @default("PENDENTE") // PENDENTE, APROVADO, REJEITADO
+  requestedById    String   // ID do usuário que pediu a exclusão
+  approvedOrRejectedById String?  // ID do admin que analisou
+  
+  create_at        DateTime? @default(now())
+  updated_at       DateTime? @updatedAt
+  
+  @@map("deletion_requests")
+}
+
+//Modelo para o log de auditoria
+model AuditLog {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  actionType String   // ex: "CRIAR_PRODUTO", "SOLICITAR_EXCLUSAO", "APROVAR_EXCLUSAO"
+  userId     String   // Quem fez a ação
+  details    String?  // Detalhes extras, como o SKU do produto afetado
+  
+  timestamp  DateTime? @default(now())
+  
+  @@map("audit_logs")
+}
+
+// Tipo composto para o histórico do produto (para objetos aninhados)
+type History {
+  lastEditDate  String
+  previousPrice Float
+  bestPrice     Float
+}
+
+model Product {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  sku        String @unique
+  name       String
+  costPrice  Float
+  quantity   Int // Esta quantidade será a "virtual", calculada
+  brand      String
+  buyedUnits Int?
+
+  // Novos campos opcionais
+  unitsPerBox    Int?
+  color          String
+  repurchaseRule Int
+
+  // Novo campo de histórico (usando o tipo composto)
+  history History?
+
+  create_at  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("products")
+}
+
+// Novo modelo para locais de armazenamento de produtos
+model ProductLocation {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  sku         String
+  name        String   // <-- ADICIONE ESTA LINHA
+  location    String
+  unitsPerBox Int
+  volume      Int
+  date        String
+  
+  @@map("product_locations")
+}
+
+// Novo modelo para saídas de produtos
+model ProductExit {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  sku         String
+  name        String
+  quantity    Int
+  date        String
+  exitType    String
+  observation String? // Tornando observação opcional
+  store       String? // <-- ADICIONE ESTA LINHA
+
+  @@map("product_exits")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  password  String
+  role      Role     @default(USUARIO) // Padrão agora é USUARIO
+  
+  create_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("users")
+}
+
+// NOVO MODELO PARA A LISTA MESTRA DE LOCAIS
+model MasterLocation {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique // O nome da localização (ex: "Corredor A, Prat. 1")
+
+  @@map("master_locations")
+}
