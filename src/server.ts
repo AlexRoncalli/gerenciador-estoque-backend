@@ -1,4 +1,5 @@
-import Fastify from 'fastify';
+// em src/server.ts
+
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { routes } from './routes.js';
@@ -20,3 +21,5 @@ const start = async () => {
     process.exit(1);
   }
 };
+
+start();
