@@ -1,20 +1,16 @@
 import Fastify from 'fastify';
+import Fastify from 'fastify';
 import cors from '@fastify/cors';
-// import { routes } from './routes.js'; // LINHA COMENTADA
+import { routes } from './routes.js';
 
 const app = Fastify({ logger: true });
 
 const start = async () => {
-  // await app.register(routes); // LINHA COMENTADA
-  await app.register(cors, {
-    origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  });
+  // 1. REGISTRE O CORS PRIMEIRO!
+  await app.register(cors);
 
-  // ROTA DE TESTE ADICIONADA
-  app.get('/health', async (request, reply) => {
-    return { status: 'ok' };
-  });
+  // 2. DEPOIS REGISTRE AS ROTAS
+  await app.register(routes);
 
   try {
     const port = process.env.PORT ? Number(process.env.PORT) : 3333;
@@ -24,5 +20,3 @@ const start = async () => {
     process.exit(1);
   }
 };
-
-start();
