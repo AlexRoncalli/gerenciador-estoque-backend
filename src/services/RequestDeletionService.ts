@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface RequestDeletionProps {
   productSku: string;
@@ -8,7 +8,7 @@ interface RequestDeletionProps {
 class RequestDeletionService {
   async execute({ productSku, requestedById }: RequestDeletionProps) {
     // 1. Verifica se o produto existe
-    const product = await prismaClient.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: { sku: productSku },
     });
 
@@ -17,7 +17,7 @@ class RequestDeletionService {
     }
 
     // 2. Verifica se já existe uma solicitação pendente para este produto
-    const existingRequest = await prismaClient.deletionRequest.findFirst({
+    const existingRequest = await prisma.deletionRequest.findFirst({
       where: {
         productSku: productSku,
         status: "PENDENTE",
@@ -29,15 +29,15 @@ class RequestDeletionService {
     }
 
     // 3. Cria a solicitação de exclusão e o log de auditoria em uma única transação
-    const [deletionRequest] = await prismaClient.$transaction([
-      prismaClient.deletionRequest.create({
+    const [deletionRequest] = await prisma.$transaction([
+      prisma.deletionRequest.create({
         data: {
           productSku: productSku,
           requestedById: requestedById,
           status: "PENDENTE",
         },
       }),
-      prismaClient.auditLog.create({
+      prisma.auditLog.create({
         data: {
           actionType: "SOLICITAR_EXCLUSAO",
           userId: requestedById,

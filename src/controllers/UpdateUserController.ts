@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UpdateUserService } from "../services/UpdateUserService.js";
-import { Role } from "../generated/prisma/index.js";
+import { Role } from '@prisma/client';
 
 class UpdateUserController {
   async handle(request: FastifyRequest, reply: FastifyReply) {

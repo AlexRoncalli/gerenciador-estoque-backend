@@ -1,8 +1,8 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 class ListUsersService {
   async execute() {
-    const users = await prismaClient.user.findMany({
+    const users = await prisma.user.findMany({
       select: { // Selecionamos os campos para não expor a senha
         id: true,
         name: true,

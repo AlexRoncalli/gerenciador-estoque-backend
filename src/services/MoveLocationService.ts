@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface MoveLocationProps {
   sourceLocationId: string;
@@ -12,7 +12,7 @@ class MoveLocationService {
       throw new Error("Dados para movimentação inválidos.");
     }
 
-    return await prismaClient.$transaction(async (prisma) => {
+    return await prisma.$transaction(async (prisma) => {
       const sourceLocation = await prisma.productLocation.findUnique({
         where: { id: sourceLocationId },
       });

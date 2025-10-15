@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface ApproveDeletionRequestProps {
   requestId: string;
@@ -8,7 +8,7 @@ interface ApproveDeletionRequestProps {
 class ApproveDeletionRequestService {
   async execute({ requestId, adminId }: ApproveDeletionRequestProps) {
     // Encontra a solicitação para garantir que ela existe e está pendente
-    const request = await prismaClient.deletionRequest.findFirst({
+    const request = await prisma.deletionRequest.findFirst({
       where: { id: requestId, status: "PENDENTE" },
     });
 
@@ -17,7 +17,7 @@ class ApproveDeletionRequestService {
     }
 
     // Executa todas as operações em uma única transação
-    await prismaClient.$transaction(async (prisma) => {
+    await prisma.$transaction(async (prisma) => {
       // 1. Atualiza o status da solicitação
       await prisma.deletionRequest.update({
         where: { id: requestId },

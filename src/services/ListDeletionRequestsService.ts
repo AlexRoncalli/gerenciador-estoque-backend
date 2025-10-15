@@ -1,9 +1,9 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 class ListDeletionRequestsService {
   async execute() {
     // Busca todas as requisições com status PENDENTE
-    const requests = await prismaClient.deletionRequest.findMany({
+    const requests = await prisma.deletionRequest.findMany({
       where: {
         status: "PENDENTE",
       },

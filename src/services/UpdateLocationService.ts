@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface UpdateLocationProps {
   id: string;
@@ -12,7 +12,7 @@ interface UpdateLocationProps {
 
 class UpdateLocationService {
   async execute({ id, ...data }: UpdateLocationProps) {
-    const updatedLocation = await prismaClient.productLocation.update({
+    const updatedLocation = await prisma.productLocation.update({
       where: { id },
       data: data,
     });

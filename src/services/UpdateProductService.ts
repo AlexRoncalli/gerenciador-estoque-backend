@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface UpdateProductProps {
   sku: string; // <-- Mudamos de id para sku
@@ -9,7 +9,7 @@ interface UpdateProductProps {
 
 class UpdateProductService {
   async execute({ sku, ...data }: UpdateProductProps) {
-    const updatedProduct = await prismaClient.product.update({
+    const updatedProduct = await prisma.product.update({
       where: { sku }, // <-- Mudança aqui
       data: data,
     });

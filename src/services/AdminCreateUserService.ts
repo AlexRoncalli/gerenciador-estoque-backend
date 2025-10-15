@@ -1,6 +1,6 @@
-import prismaClient from "../prisma/index.js";
 import { hash } from "bcryptjs";
-import { Role } from "../generated/prisma/index.js";
+import { Role } from '@prisma/client';
+import { prisma } from "../prisma/index.js";
 
 interface AdminCreateUserProps {
   name: string;
@@ -16,7 +16,7 @@ class AdminCreateUserService {
 
     const passwordHash = await hash(password, 8);
 
-    const user = await prismaClient.user.create({
+    const user = await prisma.user.create({
       data: {
         name: name,
         password: passwordHash,

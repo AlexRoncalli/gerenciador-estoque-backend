@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface CreateLocationProps {
   sku: string;
@@ -15,7 +15,7 @@ class CreateLocationService {
       throw new Error("Todos os campos são obrigatórios.");
     }
 
-    const location = await prismaClient.productLocation.create({
+    const location = await prisma.productLocation.create({
       data: {
         sku: data.sku,
         name: data.name,

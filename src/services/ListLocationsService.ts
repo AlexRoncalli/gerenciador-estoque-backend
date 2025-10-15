@@ -1,8 +1,8 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 class ListLocationsService {
   async execute() {
-    const locations = await prismaClient.productLocation.findMany();
+    const locations = await prisma.productLocation.findMany();
     return locations;
   }
 }

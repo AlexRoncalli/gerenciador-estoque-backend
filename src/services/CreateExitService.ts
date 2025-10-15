@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface CreateExitProps {
   sku: string;
@@ -16,7 +16,7 @@ class CreateExitService {
       throw new Error("SKU, Nome, Quantidade e Tipo de Saída são obrigatórios.");
     }
 
-    const exit = await prismaClient.productExit.create({
+    const exit = await prisma.productExit.create({
       data: {
         ...data,
       },

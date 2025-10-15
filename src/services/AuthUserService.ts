@@ -1,5 +1,4 @@
-// src/services/AuthUserService.ts
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -11,7 +10,7 @@ interface AuthUserProps {
 class AuthUserService {
   async execute({ name, password }: AuthUserProps) {
     // 1. Verificar se o usuário existe
-    const user = await prismaClient.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         name: name,
       },

@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface DeleteProductProps {
   sku: string;
@@ -11,7 +11,7 @@ class DeleteProductService {
       throw new Error("Solicitação Inválida. SKU é obrigatório.");
     }
 
-    await prismaClient.$transaction(async (prisma) => {
+    await prisma.$transaction(async (prisma) => {
       await prisma.productLocation.deleteMany({ where: { sku: sku } });
       await prisma.productExit.deleteMany({ where: { sku: sku } });
       await prisma.product.delete({ where: { sku: sku } });

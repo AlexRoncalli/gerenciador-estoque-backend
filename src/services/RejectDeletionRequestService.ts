@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface RejectDeletionRequestProps {
   requestId: string;
@@ -6,7 +6,7 @@ interface RejectDeletionRequestProps {
 }
 class RejectDeletionRequestService {
   async execute({ requestId, adminId }: RejectDeletionRequestProps) {
-    const request = await prismaClient.deletionRequest.findFirst({
+    const request = await prisma.deletionRequest.findFirst({
       where: { id: requestId, status: "PENDENTE" },
     });
 
@@ -14,12 +14,12 @@ class RejectDeletionRequestService {
       throw new Error("Solicitação não encontrada ou já processada.");
     }
 
-    await prismaClient.$transaction([
-      prismaClient.deletionRequest.update({
+    await prisma.$transaction([
+      prisma.deletionRequest.update({
         where: { id: requestId },
         data: { status: "REJEITADO", approvedOrRejectedById: adminId },
       }),
-      prismaClient.auditLog.create({
+      prisma.auditLog.create({
         data: {
           actionType: "REJEITAR_EXCLUSAO",
           userId: adminId,

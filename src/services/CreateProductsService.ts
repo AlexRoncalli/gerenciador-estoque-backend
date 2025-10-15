@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 // A INTERFACE PRECISA ACEITAR CAMPOS OPCIONAIS COM '?'
 interface CreateProductProps {
@@ -18,7 +18,7 @@ class CreateProductService {
       throw new Error("SKU, Nome, Preço, Cor e Regra de Recompra são obrigatórios.");
     }
 
-    const existingSku = await prismaClient.product.findFirst({
+    const existingSku = await prisma.product.findFirst({
       where: {
         sku: sku,
       },
@@ -28,7 +28,7 @@ class CreateProductService {
       throw new Error("Um produto com este SKU já existe.");
     }
 
-    const product = await prismaClient.product.create({
+    const product = await prisma.product.create({
       data: {
         sku,
         name,

@@ -1,8 +1,8 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 class CountDeletionRequestsService {
   async execute() {
-    const count = await prismaClient.deletionRequest.count({
+    const count = await prisma.deletionRequest.count({
       where: {
         status: "PENDENTE",
       },

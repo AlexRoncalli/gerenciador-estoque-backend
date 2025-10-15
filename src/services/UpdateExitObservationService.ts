@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 interface UpdateObservationProps {
   id: string;
@@ -11,7 +11,7 @@ class UpdateExitObservationService {
       throw new Error("ID do registro de saída é obrigatório.");
     }
 
-    const updatedExit = await prismaClient.productExit.update({
+    const updatedExit = await prisma.productExit.update({
       where: { id },
       data: {
         observation: observation,

@@ -1,4 +1,4 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 import { hash } from "bcryptjs";
 
 interface CreateUserProps {
@@ -15,7 +15,7 @@ class CreateUserService {
     // Criptografa a senha antes de salvar
     const passwordHash = await hash(password, 8);
 
-    const user = await prismaClient.user.create({
+    const user = await prisma.user.create({
       data: {
         name: name,
         password: passwordHash,

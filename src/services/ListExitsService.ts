@@ -1,8 +1,8 @@
-import prismaClient from "../prisma/index.js";
+import { prisma } from "../prisma/index.js";
 
 class ListExitsService {
   async execute() {
-    const exits = await prismaClient.productExit.findMany();
+    const exits = await prisma.productExit.findMany();
     return exits;
   }
 }
