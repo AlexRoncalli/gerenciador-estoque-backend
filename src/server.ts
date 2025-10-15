@@ -1,4 +1,6 @@
 // em src/server.ts
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
