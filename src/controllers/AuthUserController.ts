@@ -3,11 +3,11 @@ import { AuthUserService } from "../services/AuthUserService.js";
 
 class AuthUserController {
   async handle(request: FastifyRequest, reply: FastifyReply) {
+    try { 
     const { name, password } = request.body as { name: string; password: string };
 
     const authUserService = new AuthUserService();
 
-    try {
       const { token } = await authUserService.execute({ name, password });
       reply.send({ token });
     } catch (error) {
