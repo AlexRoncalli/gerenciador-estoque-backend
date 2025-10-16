@@ -20,8 +20,11 @@ class CreateProductService {
 
     const existingSku = await prisma.product.findFirst({
       where: {
-        sku: sku,
-      },
+        sku: {
+          equals: sku,
+          mode: 'insensitive' // Garante que 'abc' e 'ABC' sejam considerados iguais
+        }
+      }
     });
 
     if (existingSku) {
