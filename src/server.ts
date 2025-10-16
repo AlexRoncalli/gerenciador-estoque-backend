@@ -10,16 +10,27 @@ const start = async () => {
   // --- CONFIGURAÇÃO DE CORS CORRIGIDA ---
   // Registre o CORS como o PRIMEIRO plugin.
   // A opção 'origin: true' é a mais flexível para começar.
-  await app.register(cors, { origin: true });
+  await app.register(cors, {
+    // ‼️ MUITO IMPORTANTE: Coloque a URL exata do seu frontend
+    origin: 'https://frontestoque.netlify.app',
+    
+    // Métodos HTTP que seu frontend pode usar
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+
+    // Headers que seu frontend pode enviar (Authorization é essencial para o token JWT)
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   // Agora registre suas rotas normalmente
   await app.register(routes);
 
   try {
-    const port = process.env.PORT ? Number(process.env.PORT) : 3333;
-    await app.listen({ port: port, host: '0.0.0.0' });
+    // Para deploy no Render, é importante usar host: '0.0.0.0'
+    await app.listen({
+      port: process.env.PORT ? Number(process.env.PORT) : 3333,
+      host: '0.0.0.0'
+    });
   } catch (err) {
-    // Loga o erro se a inicialização do servidor falhar
     app.log.error(err);
     process.exit(1);
   }
