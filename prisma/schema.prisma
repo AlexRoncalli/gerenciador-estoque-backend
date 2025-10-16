@@ -87,6 +87,7 @@ model ProductLocation {
   unitsPerBox Int
   volume      Int
   date        String
+  create_at   DateTime? @default(now())
   
   @@map("product_locations")
 }
@@ -101,6 +102,7 @@ model ProductExit {
   exitType    String
   observation String? // Tornando observação opcional
   store       String? // <-- ADICIONE ESTA LINHA
+  create_at   DateTime? @default(now())
 
   @@map("product_exits")
 }
