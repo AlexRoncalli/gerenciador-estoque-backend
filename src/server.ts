@@ -12,7 +12,7 @@ const start = async () => {
   // A opção 'origin: true' é a mais flexível para começar.
   await app.register(cors, {
     // ‼️ MUITO IMPORTANTE: Coloque a URL exata do seu frontend
-    origin: 'https://frontestoque.netlify.app',
+    origin: 'https://estoquefront.netlify.app',
     
     // Métodos HTTP que seu frontend pode usar
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
